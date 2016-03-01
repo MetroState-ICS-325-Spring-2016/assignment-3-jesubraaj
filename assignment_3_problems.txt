@@ -11,14 +11,57 @@ SELECT COUNT(*) FROM `customers` WHERE `creditLimit` > 20000;
 97
 
 1. How many customers are located in Germany? (Should return only 1 field with the count.)
+	SELECT COUNT(*) as TotCustomers FROM `customers` WHERE `country` = 'Germany';
+
+	//output
+	    # TotCustomers
+        13
+
 
 2. What is the contact first name and contact last name for every contact that has a first name that starts with D?
+	SELECT `customerName`, `contactLastName` FROM `customers` WHERE `contactLastName` LIKE 'D%';
 
-3. What are the customer names for every company that Leslie Tompson is a sales rep for?
+	//output
+	    # contactFirstName, contactLastName
+        Dan, Lewis
+        Daniel, Da Silva
+        Daniel , Tonini
+        Dean, Cassidy
+        Diego , Freyre
+        Dominique, Perrier
+        Dorothy, Young
+
+3. What are the customer names for every company that Leslie Thompson is a sales rep for?
+    SELECT `customerName` FROM `customers` WHERE `salesRepEmployeeNumber` = (
+    	SELECT `employeeNumber` FROM `employees`
+        WHERE `lastName` = 'Thompson'
+        AND `firstName` = 'Leslie');
+
+    //output
+        # customerName
+        Boards & Toys Co.
+        Collectable Mini Designs Co.
+        Men 'R' US Retailers, Ltd.
+        Signal Gift Stores
+        Toys4GrownUps.com
+        West Coast Collectables Co.
 
 4. What was the amount for the last payment that Boards & Toys Co. made? (Should return only 1 field with the amount.)
+    SELECT `amount` AS `Last Payment Date` FROM `customers`, `payments`
+    WHERE `customerName` = 'Boards & Toys Co.'
+    AND `customers`.`customerNumber` = `payments`.`customerNumber`
+    AND `paymentDate` LIMIT 1;
+
+    //output
+        # Last Payment Date
+        3452.75
 
 5. How many payments have been made that are more than 20000? (Should return 1 field with the count.)
+    SELECT COUNT(amount) as `Payments More Than 20000` FROM `payments` WHERE `amount` > '20000';
+
+    //output
+        # Payments More Than 20000
+        195
 
 6. Write a PHP program that prints the following information to the terminal:
 The customer name, country, and sales rep name on one line per customer.
